@@ -66,8 +66,8 @@ $salesvar = getVariance($conn);
  	// }
 
  	
- // 	console.log(person)
-	// console.log(columns)
+ 	console.log(person)
+	console.log(columns)
 
 
 </script>
