@@ -7,7 +7,7 @@
 
 function connect(){
 
-$db_name = 'buymore';  
+$db_name = 'scotchbox';  
 $db_user = 'root';  
 $db_pass = 'root';
 $db_host = 'localhost';
@@ -360,21 +360,38 @@ $result = $conn->query($sql);
 
 
 if($result->num_rows > 0){
-
+	// var_dump($result->num_rows);
 	while ($row = $result->fetch_assoc()) {
-
+		// var_dump($row);
+		// $t = $row['total'];
+		// $sp = $row['firstname']." ".$row['lastname'];
+		// $m = $row['month'];
+		// $v = ($tot[$j] - ($tot[$j-1]))/$tot[$j]*100;	
 		array_push($tot,$row['total']);
 		array_push($sales_person, $row['firstname']." ".$row['lastname']);
 		array_push($month, $row['month']);
+		// $salesVariance[$sp][] = [ 
+		// 							'month'=> $m,
+		// 							'total'=>$t,
+		// 							'variance' => $var
+		// 							]; 
+
+
+
 	}
 }
-
+// print_r($tot);
 for ($j=0; $j < sizeof($tot); $j++) { 	
 		
-	if($j > 0){
-		// var_dump($j);
-		$var = ($tot[$j] - ($tot[$j-1]))/$tot[$j]*100;		
-		// array_push($hold, ($tot[$j] - ($tot[$j-1]))/$tot[$j]*100);
+	if($j > 0 ){
+		
+		$str = "(".$tot[$j]."-(".$tot[$j-1]."))/".$tot[$j]."*100";
+		$var = ($tot[$j] - ($tot[$j-1]))/$tot[$j]*100;	
+		// echo $str." = ".$var;
+		// echo "<br>";
+		
+			
+		
 	}
 
 	$salesVariance[$sales_person[$j]][] = [ 

@@ -2,6 +2,10 @@
 include "includes/dbconnection.php";
 $conn = connect();
 $salesvar = getVariance($conn);
+$month = selectMonth($conn);
+
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,23 +19,51 @@ $salesvar = getVariance($conn);
 
 </head>
 <body>
-	<p id='test'>Table</p>
+
 	<table id="table_id" class="display table table-bordered table-striped">
     <thead>
         <tr>
-<!--             <th>Sal</th>
-            <th>Column 2</th> -->
+             <th>Sales person</th>
+             <?php 
+                foreach ($month as $key => $value) {
+                    echo "<th>".$value."</th>";
+                }
+             ?>
+
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>Row 1 Data 1</td>
-            <td>Row 1 Data 2</td>
-        </tr>
-        <tr>
-            <td>Row 2 Data 1</td>
-            <td>Row 2 Data 2</td>
-        </tr>
+        
+            <?php
+            $varianceColour = "";
+            foreach ($salesvar as $key => $value) {
+                echo "<tr>";
+                echo "<td>".$key."</td>";
+                // print_r($value);
+               foreach ($value as $key1 => $value1) {
+                
+                $variance =  ($key1 === 0 ? 0:round($value1['variance']));
+
+                    if($variance > 0){
+                        $varianceColour = "green";
+                    } else if($variance < 0){
+                        $varianceColour = "red";
+                    } else{
+                        $varianceColour = "blue";
+                    } 
+
+                     
+
+
+                   echo "<td>".$value1['total']." <span style='color: ".$varianceColour."'> ".   $variance ."% </span></td>";
+                
+               }
+                echo "</tr>";
+            }
+
+            ?>
+        <span ></span>
+        
     </tbody>
 </table>
 </body>
@@ -44,30 +76,6 @@ $salesvar = getVariance($conn);
 	$(document).ready( function () {
     	$('#table_id').DataTable();
 	} );
-	var columns = ['Sales Person'];
-	var person = []
-
-	var monthlySalesAndVariance = JSON.parse('<?php  echo json_encode($salesvar);?>');
-  	var salesObj;
-  	console.log(monthlySalesAndVariance)
- 	
- 	for (i in monthlySalesAndVariance){
- 		person.push(i)
- 		salesObj = monthlySalesAndVariance[i]
-	}
-
- 	for(j in salesObj){
- 		columns.push(salesObj[j]['month'])
- 		
- 	}
-
- 	// for(c in columns){
- 	// 	$('table thead tr').appendTo('<th>'+columns[c]+'</th>')	
- 	// }
-
- 	
- 	console.log(person)
-	console.log(columns)
 
 
 </script>
